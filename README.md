@@ -1,9 +1,9 @@
-# Fabric Example Mod
+# BitsCreativeUtils
 
-## Setup
+A collection of utilities for the Bits creative server
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
+To be used in conjunction with:
 
-## License
-
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+Spark
+Hydrogen
+Lithium
