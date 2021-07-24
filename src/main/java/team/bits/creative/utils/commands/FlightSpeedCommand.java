@@ -12,6 +12,7 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import team.bits.creative.utils.BitsCreativeUtils;
+import team.bits.creative.utils.mixin.ServerPlayerEntityInvoker;
 import team.bits.nibbles.command.Command;
 import team.bits.nibbles.command.CommandInformation;
 
@@ -45,7 +46,11 @@ public class FlightSpeedCommand extends Command {
                                         .suggests(CommandSuggestionUtils.INTEGERS_1_TO_10)
                                 ));
 
-        super.registerAliases(dispatcher, commandNode);
+        dispatcher.register(
+                literal("fs")
+                        .executes(this)
+                        .redirect(commandNode)
+        );
     }
 
     public int setSpeed(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
@@ -56,7 +61,7 @@ public class FlightSpeedCommand extends Command {
 
         // If provided argument is between 1 and 10, set their speed
         if (speedArg >= 1 && speedArg <= 10) {
-            player.getAbilities().setFlySpeed(getSpeedFromArgument(speedArg));
+            setSpeed(player, getSpeedFromArgument(speedArg));
             BitsCreativeUtils.audience(player).sendMessage(Component.text(ADJUSTING_SPEED_MSG).color(NamedTextColor.GREEN));
         } else {
             throw new SimpleCommandExceptionType(() -> INVALID_ARG_MSG).create();
@@ -73,6 +78,11 @@ public class FlightSpeedCommand extends Command {
         return (float) ((float) arg / 100.0 * 5);
     }
 
+    private void setSpeed(ServerPlayerEntity player, float speed) {
+        player.getAbilities().setFlySpeed(speed);
+        ((ServerPlayerEntityInvoker) player).invokeSendAbilitiesUpdate();
+    }
+
     // Toggle speed
     @Override
     public int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
@@ -83,11 +93,11 @@ public class FlightSpeedCommand extends Command {
         // If player is already speedy
         if (speedArg > 1) {
             // Reset them to default speed
-            player.getAbilities().setFlySpeed(DEFAULT_SPEED);
+            setSpeed(player, DEFAULT_SPEED);
             BitsCreativeUtils.audience(player).sendMessage(Component.text(RESETTING_SPEED_MSG).color(NamedTextColor.GREEN));
         } else {
             // Set them to be as fast as possible
-            player.getAbilities().setFlySpeed(MAX_SPEED);
+            setSpeed(player, MAX_SPEED);
             BitsCreativeUtils.audience(player).sendMessage(Component.text(ADJUSTING_SPEED_MSG).color(NamedTextColor.GREEN));
         }
 
