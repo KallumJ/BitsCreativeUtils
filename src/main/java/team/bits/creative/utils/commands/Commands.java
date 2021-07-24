@@ -1,6 +1,5 @@
 package team.bits.creative.utils.commands;
 
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import team.bits.nibbles.command.Command;
 import team.bits.nibbles.command.CommandManager;
 
@@ -13,6 +12,7 @@ public class Commands {
 
     public static void registerCommands() {
         addCommand(new NightVisionCommand());
+        addCommand(new FlightSpeedCommand());
     }
 
     private static void addCommand(Command command) {
