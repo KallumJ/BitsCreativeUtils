@@ -12,7 +12,6 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import team.bits.creative.utils.BitsCreativeUtils;
-import team.bits.creative.utils.mixin.ServerPlayerEntityInvoker;
 import team.bits.nibbles.command.Command;
 import team.bits.nibbles.command.CommandInformation;
 
@@ -70,17 +69,21 @@ public class FlightSpeedCommand extends Command {
         return 1;
     }
 
-    private static int getArgumentFromSpeed(float speed) {
-        return (int) (speed * 100 / 5);
-    }
-
+    // Default flight speed is 0.05. Min argument is 1. This will return 0.05 if you pass 1,
+    // and then higher arguments will scale accordingly, e.g, 2 should be double original speed, returns 0.1
     private static float getSpeedFromArgument(int arg) {
         return (float) ((float) arg / 100.0 * 5);
     }
 
+    // This takes a speed value, and returns what argument would've been passed to create that speed value
+    // e.g, passing 0.05 will return 1.
+    private static int getArgumentFromSpeed(float speed) {
+        return (int) (speed * 100 / 5);
+    }
+
     private void setSpeed(ServerPlayerEntity player, float speed) {
         player.getAbilities().setFlySpeed(speed);
-        ((ServerPlayerEntityInvoker) player).invokeSendAbilitiesUpdate();
+        player.sendAbilitiesUpdate();
     }
 
     // Toggle speed

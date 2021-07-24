@@ -4,7 +4,6 @@
   "package": "team.bits.creative.utils.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "ServerPlayerEntityInvoker"
   ],
   "client": [
   ],
