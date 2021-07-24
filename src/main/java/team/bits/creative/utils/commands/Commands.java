@@ -10,6 +10,7 @@ public class Commands {
 
     static {
         addCommand(new NightVisionCommand());
+        addCommand(new FlightSpeedCommand());
     }
 
     public static void registerCommands() {
