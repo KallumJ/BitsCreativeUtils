@@ -9,15 +9,18 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import team.bits.creative.utils.BitsCreativeUtils;
+import team.bits.nibbles.command.Command;
+import team.bits.nibbles.command.CommandInformation;
 
 public class NightVisionCommand extends Command {
     private static final String ADD_MSG = "Gave night vision";
     private static final String REMOVE_MSG = "Removed night vision";
 
     public NightVisionCommand() {
-        super("nightvision", new String[]{"nv"}, new CommandInformation()
+        super("nightvision", new CommandInformation()
             .setDescription("Toggles whether night vision is applied or not")
-            .setPublic(true)
+            .setPublic(true),
+                "nv"
         );
     }
 
