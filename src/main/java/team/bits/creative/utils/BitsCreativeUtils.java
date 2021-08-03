@@ -8,6 +8,8 @@ import net.minecraft.server.command.CommandOutput;
 import net.minecraft.server.command.ServerCommandSource;
 import org.jetbrains.annotations.NotNull;
 import team.bits.creative.utils.commands.Commands;
+import team.bits.creative.utils.listeners.PlayerConnectListener;
+import team.bits.nibbles.event.misc.PlayerConnectEvent;
 
 public class BitsCreativeUtils implements ModInitializer {
     private static FabricServerAudiences adventure;
@@ -18,6 +20,8 @@ public class BitsCreativeUtils implements ModInitializer {
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> adventure = null);
 
         Commands.registerCommands();
+
+        PlayerConnectEvent.EVENT.register(new PlayerConnectListener());
     }
 
 
