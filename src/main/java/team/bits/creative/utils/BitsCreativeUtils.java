@@ -7,9 +7,12 @@ import net.kyori.adventure.platform.fabric.FabricServerAudiences;
 import net.minecraft.server.command.CommandOutput;
 import net.minecraft.server.command.ServerCommandSource;
 import org.jetbrains.annotations.NotNull;
+import team.bits.creative.utils.builderswand.BuildersWandHandler;
 import team.bits.creative.utils.commands.Commands;
 import team.bits.creative.utils.listeners.PlayerConnectListener;
 import team.bits.nibbles.event.misc.PlayerConnectEvent;
+import team.bits.nibbles.event.misc.PlayerInteractWithBlockEvent;
+import team.bits.nibbles.utils.Scheduler;
 
 public class BitsCreativeUtils implements ModInitializer {
     private static FabricServerAudiences adventure;
@@ -22,6 +25,10 @@ public class BitsCreativeUtils implements ModInitializer {
         Commands.registerCommands();
 
         PlayerConnectEvent.EVENT.register(new PlayerConnectListener());
+
+        BuildersWandHandler buildersWandHandler = new BuildersWandHandler();
+        Scheduler.scheduleAtFixedRate(buildersWandHandler, 0, 5);
+        PlayerInteractWithBlockEvent.EVENT.register(buildersWandHandler);
     }
 
 
