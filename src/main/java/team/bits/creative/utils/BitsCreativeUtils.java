@@ -1,7 +1,6 @@
 package team.bits.creative.utils;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.fabric.FabricServerAudiences;
 import net.minecraft.server.command.CommandOutput;
@@ -10,25 +9,27 @@ import org.jetbrains.annotations.NotNull;
 import team.bits.creative.utils.builderswand.BuildersWandHandler;
 import team.bits.creative.utils.commands.Commands;
 import team.bits.creative.utils.listeners.PlayerConnectListener;
-import team.bits.nibbles.event.misc.PlayerConnectEvent;
-import team.bits.nibbles.event.misc.PlayerInteractWithBlockEvent;
+import team.bits.nibbles.event.misc.ServerStartingEvent;
+import team.bits.nibbles.event.misc.ServerStoppingEvent;
 import team.bits.nibbles.utils.Scheduler;
+import team.bits.nibbles.event.base.EventManager;
 
 public class BitsCreativeUtils implements ModInitializer {
     private static FabricServerAudiences adventure;
 
     @Override
     public void onInitialize() {
-        ServerLifecycleEvents.SERVER_STARTING.register(server -> adventure = FabricServerAudiences.of(server));
-        ServerLifecycleEvents.SERVER_STOPPED.register(server -> adventure = null);
+
+        EventManager.INSTANCE.registerEvents((ServerStartingEvent.Listener) event -> adventure = FabricServerAudiences.of(event.getServer()));
+        EventManager.INSTANCE.registerEvents((ServerStoppingEvent.Listener) event -> adventure = null);
 
         Commands.registerCommands();
 
-        PlayerConnectEvent.EVENT.register(new PlayerConnectListener());
-
+        EventManager.INSTANCE.registerEvents(new PlayerConnectListener());
         BuildersWandHandler buildersWandHandler = new BuildersWandHandler();
         Scheduler.scheduleAtFixedRate(buildersWandHandler, 0, 5);
-        PlayerInteractWithBlockEvent.EVENT.register(buildersWandHandler);
+
+        EventManager.INSTANCE.registerEvents(buildersWandHandler);
     }
 
 

@@ -10,7 +10,7 @@ public class Util {
     private static final double LOOK_DISTANCE = 4.5;
 
     public static TargettedBlock getTargetedBlock(ServerPlayerEntity player) {
-        World world = player.getServerWorld();
+        World world = player.getWorld();
 
         // Cast a ray from player with a max range of targetting distance
         BlockHitResult raycast = (BlockHitResult) player.raycast(LOOK_DISTANCE, 0f, false);

@@ -21,7 +21,7 @@ import java.util.Collection;
 
 import static team.bits.creative.utils.builderswand.BuildersWandUtils.MAX_TARGET_DISTANCE;
 
-public class BuildersWandHandler implements Runnable, PlayerInteractWithBlockEvent {
+public class BuildersWandHandler implements Runnable, PlayerInteractWithBlockEvent.Listener {
 
     @Override
     public void run() {
@@ -34,23 +34,44 @@ public class BuildersWandHandler implements Runnable, PlayerInteractWithBlockEve
         }
     }
 
+    private static void showParticles(@NotNull ServerPlayerEntity player) {
+        final ServerWorld world = player.getWorld();
+
+        // get all blocks targeted by the wand
+        BuildersWandUtils.getTargetLocations(player)
+                // show a particle at the location
+                .forEach(pos -> displayParticle(world, pos));
+    }
+
+    private static void displayParticle(@NotNull ServerWorld world, @NotNull BlockPos target) {
+        // flame particle cuz it's nice and simple
+        world.spawnParticles(
+                ParticleTypes.FLAME,
+                // add 0.5 to all coords to get the center of the block
+                target.getX() + 0.5, target.getY() + 0.5, target.getZ() + 0.5,
+                0, 0, 0, 0, 0
+        );
+    }
+
     @Override
-    public @NotNull ActionResult onPlayerInteract(@NotNull ServerPlayerEntity player, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Hand hand) {
+    public void onPlayerInteractWithBlock(@NotNull PlayerInteractWithBlockEvent playerInteractWithBlockEvent) {
+        ServerPlayerEntity player = playerInteractWithBlockEvent.getPlayer();
+
         if (BuildersWandUtils.isHoldingWand(player)) {
 
             // get the block the player is looking at
             HitResult rayTraceResult = player.raycast(MAX_TARGET_DISTANCE, 0, false);
             // if the player isn't looking at a block, do nothing
             if (rayTraceResult.getType() == HitResult.Type.MISS || !(rayTraceResult instanceof BlockHitResult blockResult)) {
-                return ActionResult.PASS;
+                return;
             }
 
             // the client can send multiple interact events, we only want the first one
             if (Util.getMeasuringTimeMs() - player.getLastActionTime() < 10) {
-                return ActionResult.PASS;
+                return;
             }
 
-            final ServerWorld world = player.getServerWorld();
+            final ServerWorld world = player.getWorld();
             final BlockPos origin = blockResult.getBlockPos();
             final Direction targetFace = blockResult.getSide();
             final Direction face = targetFace.getOpposite();
@@ -68,36 +89,15 @@ public class BuildersWandHandler implements Runnable, PlayerInteractWithBlockEve
                 }
 
                 // make the player swing their arm
+                Hand hand = player.getActiveHand();
                 player.swingHand(hand);
+
                 // play a block place sound
                 world.playSound(
                         null, origin.getX(), origin.getY(), origin.getZ(),
                         SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0f, 1.0f
                 );
-
-                return ActionResult.CONSUME;
             }
         }
-
-        return ActionResult.PASS;
-    }
-
-    private static void showParticles(@NotNull ServerPlayerEntity player) {
-        final ServerWorld world = player.getServerWorld();
-
-        // get all blocks targeted by the wand
-        BuildersWandUtils.getTargetLocations(player)
-                // show a particle at the location
-                .forEach(pos -> displayParticle(world, pos));
-    }
-
-    private static void displayParticle(@NotNull ServerWorld world, @NotNull BlockPos target) {
-        // flame particle cuz it's nice and simple
-        world.spawnParticles(
-                ParticleTypes.FLAME,
-                // add 0.5 to all coords to get the center of the block
-                target.getX() + 0.5, target.getY() + 0.5, target.getZ() + 0.5,
-                0, 0, 0, 0, 0
-        );
     }
 }

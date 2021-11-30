@@ -40,7 +40,7 @@ public class BuildersWandUtils {
     }
 
     public static @NotNull Collection<BlockPos> getTargetLocations(@NotNull ServerPlayerEntity player, @NotNull BlockHitResult blockResult) {
-        ServerWorld world = player.getServerWorld();
+        ServerWorld world = player.getWorld();
         BlockPos directTarget = blockResult.getBlockPos();
         Direction directFace = blockResult.getSide();
         Direction oppositeFace = directFace.getOpposite();
