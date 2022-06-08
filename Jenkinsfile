@@ -24,8 +24,8 @@ pipeline {
                 sh """test/production_server_test.sh \
                         --java-path '${JAVA_HOME}' \
                         --mod-jar 'bits-creative-utils-${BRANCH_NAME}-${BUILD_NUMBER}.jar' \
-                        --mc-version '1.18-rc1' \
-                        --loader-version '0.12.5'
+                        --mc-version '1.19' \
+                        --loader-version '0.14.6' \
                    """
             }
         }

@@ -3,7 +3,6 @@ package team.bits.creative.utils.commands;
 import team.bits.nibbles.command.Command;
 import team.bits.nibbles.command.CommandManager;
 
-
 import java.util.ArrayList;
 
 public class Commands {

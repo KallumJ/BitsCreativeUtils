@@ -3,7 +3,7 @@ package team.bits.creative.utils.listeners;
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.NotNull;
-import team.bits.nibbles.event.misc.PlayerConnectEvent;
+import team.bits.nibbles.event.server.PlayerConnectEvent;
 import team.bits.nibbles.player.CopyPlayerDataEvent;
 import team.bits.nibbles.utils.Scheduler;
 import team.bits.nibbles.utils.ServerInstance;

@@ -6,15 +6,14 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.CommandNode;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import team.bits.creative.utils.BitsCreativeUtils;
+import net.minecraft.text.Text;
 import team.bits.nibbles.command.Command;
 import team.bits.nibbles.command.CommandInformation;
-
+import team.bits.nibbles.utils.Colors;
+import team.bits.nibbles.utils.MessageTypes;
 
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -61,7 +60,7 @@ public class FlightSpeedCommand extends Command {
         // If provided argument is between 1 and 10, set their speed
         if (speedArg >= 1 && speedArg <= 10) {
             setSpeed(player, getSpeedFromArgument(speedArg));
-            BitsCreativeUtils.audience(player).sendMessage(Component.text(ADJUSTING_SPEED_MSG).color(NamedTextColor.GREEN));
+            player.sendMessage(Text.literal(ADJUSTING_SPEED_MSG), MessageTypes.POSITIVE);
         } else {
             throw new SimpleCommandExceptionType(() -> INVALID_ARG_MSG).create();
         }
@@ -97,11 +96,11 @@ public class FlightSpeedCommand extends Command {
         if (speedArg > 1) {
             // Reset them to default speed
             setSpeed(player, DEFAULT_SPEED);
-            BitsCreativeUtils.audience(player).sendMessage(Component.text(RESETTING_SPEED_MSG).color(NamedTextColor.GREEN));
+            player.sendMessage(Text.literal(RESETTING_SPEED_MSG), MessageTypes.POSITIVE);
         } else {
             // Set them to be as fast as possible
             setSpeed(player, MAX_SPEED);
-            BitsCreativeUtils.audience(player).sendMessage(Component.text(ADJUSTING_SPEED_MSG).color(NamedTextColor.GREEN));
+            player.sendMessage(Text.literal(ADJUSTING_SPEED_MSG), MessageTypes.POSITIVE);
         }
 
         return 1;

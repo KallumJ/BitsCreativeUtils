@@ -1,12 +1,15 @@
 package team.bits.creative.utils.mixin;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.Items;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -14,7 +17,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import team.bits.creative.utils.BitsCreativeUtils;
+import team.bits.nibbles.utils.Colors;
+import team.bits.nibbles.utils.MessageTypes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +34,7 @@ public class TapeMeasureMixin {
 
     @Inject(at = @At("RETURN"), method = "useOnBlock")
     public void measureDistance(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
-        PlayerEntity player = context.getPlayer();
+        ServerPlayerEntity player = (ServerPlayerEntity) context.getPlayer();
         Hand hand = context.getHand();
 
         if (player != null && player.getStackInHand(hand).isOf(Items.BLAZE_ROD)) {
@@ -40,7 +44,8 @@ public class TapeMeasureMixin {
             if (!previousLocations.containsKey(player)) {
                 // Save the position they clicked, and inform them to click somewhere else
                 previousLocations.put(player, clickedBlockPos);
-                BitsCreativeUtils.audience(player).sendMessage(Component.text(MEASURING_MSG).color(NamedTextColor.YELLOW));
+
+                player.sendMessage(Text.literal(MEASURING_MSG), MessageTypes.NEUTRAL);
             } else {
                 // If the player has clicked before, work out the distance between the 2 positions
                 BlockPos previousBlockPos = previousLocations.get(player);
@@ -51,12 +56,12 @@ public class TapeMeasureMixin {
                 int y = Math.abs(distanceVector.getY()) + 1;
                 int z = Math.abs(distanceVector.getZ()) + 1;
 
-                BitsCreativeUtils.audience(player).sendMessage(Component.text().append(
-                        Component.text(DISTANCE_MSG).color(NamedTextColor.YELLOW),
-                        Component.text(String.format(X_STR, x)).color(NamedTextColor.RED),
-                        Component.text(String.format(Y_STR, y)).color(NamedTextColor.GREEN),
-                        Component.text(String.format(Z_STR, z)).color(NamedTextColor.AQUA)
-                ));
+                MutableText text = Text.literal(DISTANCE_MSG).styled(style -> style.withColor(Colors.NEUTRAL));
+                text.append(Text.literal(String.format(X_STR, x)).styled(style -> style.withColor(TextColor.fromFormatting(Formatting.RED))));
+                text.append(Text.literal(String.format(Y_STR, y)).styled(style -> style.withColor(TextColor.fromFormatting(Formatting.GREEN))));
+                text.append(Text.literal(String.format(Z_STR, z)).styled(style -> style.withColor(TextColor.fromFormatting(Formatting.AQUA))));
+
+                player.sendMessage(text, MessageTypes.PLAIN);
 
                 previousLocations.remove(player);
             }

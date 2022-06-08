@@ -6,7 +6,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
 import net.minecraft.util.hit.BlockHitResult;
@@ -14,7 +13,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.NotNull;
-import team.bits.nibbles.event.misc.PlayerInteractWithBlockEvent;
+import team.bits.nibbles.event.interaction.PlayerInteractWithBlockEvent;
 import team.bits.nibbles.utils.ServerInstance;
 
 import java.util.Collection;
