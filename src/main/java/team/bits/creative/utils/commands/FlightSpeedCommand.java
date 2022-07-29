@@ -13,7 +13,6 @@ import net.minecraft.text.Text;
 import team.bits.nibbles.command.Command;
 import team.bits.nibbles.command.CommandInformation;
 import team.bits.nibbles.utils.Colors;
-import team.bits.nibbles.utils.MessageTypes;
 
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -60,7 +59,7 @@ public class FlightSpeedCommand extends Command {
         // If provided argument is between 1 and 10, set their speed
         if (speedArg >= 1 && speedArg <= 10) {
             setSpeed(player, getSpeedFromArgument(speedArg));
-            player.sendMessage(Text.literal(ADJUSTING_SPEED_MSG), MessageTypes.POSITIVE);
+            player.sendMessage(Text.literal(ADJUSTING_SPEED_MSG).styled(style -> style.withColor(Colors.POSITIVE)));
         } else {
             throw new SimpleCommandExceptionType(() -> INVALID_ARG_MSG).create();
         }
@@ -96,11 +95,11 @@ public class FlightSpeedCommand extends Command {
         if (speedArg > 1) {
             // Reset them to default speed
             setSpeed(player, DEFAULT_SPEED);
-            player.sendMessage(Text.literal(RESETTING_SPEED_MSG), MessageTypes.POSITIVE);
+            player.sendMessage(Text.literal(RESETTING_SPEED_MSG).styled(style -> style.withColor(Colors.POSITIVE)));
         } else {
             // Set them to be as fast as possible
             setSpeed(player, MAX_SPEED);
-            player.sendMessage(Text.literal(ADJUSTING_SPEED_MSG), MessageTypes.POSITIVE);
+            player.sendMessage(Text.literal(ADJUSTING_SPEED_MSG).styled(style -> style.withColor(Colors.POSITIVE)));
         }
 
         return 1;

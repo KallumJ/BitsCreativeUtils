@@ -18,7 +18,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import team.bits.nibbles.utils.Colors;
-import team.bits.nibbles.utils.MessageTypes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +44,7 @@ public class TapeMeasureMixin {
                 // Save the position they clicked, and inform them to click somewhere else
                 previousLocations.put(player, clickedBlockPos);
 
-                player.sendMessage(Text.literal(MEASURING_MSG), MessageTypes.NEUTRAL);
+                player.sendMessage(Text.literal(MEASURING_MSG).styled(style -> style.withColor(Colors.NEUTRAL)));
             } else {
                 // If the player has clicked before, work out the distance between the 2 positions
                 BlockPos previousBlockPos = previousLocations.get(player);
@@ -61,7 +60,7 @@ public class TapeMeasureMixin {
                 text.append(Text.literal(String.format(Y_STR, y)).styled(style -> style.withColor(TextColor.fromFormatting(Formatting.GREEN))));
                 text.append(Text.literal(String.format(Z_STR, z)).styled(style -> style.withColor(TextColor.fromFormatting(Formatting.AQUA))));
 
-                player.sendMessage(text, MessageTypes.PLAIN);
+                player.sendMessage(text);
 
                 previousLocations.remove(player);
             }

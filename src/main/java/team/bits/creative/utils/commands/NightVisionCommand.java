@@ -10,7 +10,6 @@ import net.minecraft.text.Text;
 import team.bits.nibbles.command.Command;
 import team.bits.nibbles.command.CommandInformation;
 import team.bits.nibbles.utils.Colors;
-import team.bits.nibbles.utils.MessageTypes;
 
 public class NightVisionCommand extends Command {
     private static final String ADD_MSG = "Gave night vision";
@@ -29,11 +28,11 @@ public class NightVisionCommand extends Command {
         ServerPlayerEntity player = context.getSource().getPlayer();
 
         if (!player.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
-            player.sendMessage(Text.literal(ADD_MSG), MessageTypes.POSITIVE);
+            player.sendMessage(Text.literal(ADD_MSG).styled(style -> style.withColor(Colors.POSITIVE)));
 
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, Integer.MAX_VALUE, Integer.MAX_VALUE, false, false));
         } else {
-            player.sendMessage(Text.literal(REMOVE_MSG), MessageTypes.POSITIVE);
+            player.sendMessage(Text.literal(REMOVE_MSG).styled(style -> style.withColor(Colors.POSITIVE)));
 
             player.removeStatusEffect(StatusEffects.NIGHT_VISION);
         }
