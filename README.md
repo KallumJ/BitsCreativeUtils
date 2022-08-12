@@ -1,8 +1,15 @@
-# BitsCreativeUtils
 
-A collection of utilities for the Bits creative server
+# Bits Creative Utils
 
-To be used in conjunction with:
+A collection of creative mode based utilities for the Bits Creative server.
 
-- BitsVanilla and it's recommended mods
-- WorldEdit
+
+
+
+## Features
+
+- A builders wand for automatically placing repeated blocks
+- `/nightvision` - toggles permanent night vision to the player
+- `/flightspeed \<speed\>` - applies the provided flight speed to the player
+- Tape measure item for measuring distance between 2 points.
+
